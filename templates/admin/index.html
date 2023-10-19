@@ -80,7 +80,7 @@
         <td>
             {% if value[5] == 1 %}
                 <a href="/api/admin/users/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
-                onclick="return confirm('Вы действительно хотите удалить пользователя {{(page - 1) * 10 + loop.index}}?')">
+                onclick="return confirm('Вы действительно хотите удалить запись №{{(page - 1) * 10 + loop.index}}?')">
                 &#128465;
                 </a>
             {% else %}
@@ -127,7 +127,7 @@
             <td>{{value[3]}}</td>
             <td>{{value[4]}}</td>
             <td><a href="/api/admin/orders/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
-                onclick="return confirm('Вы действительно хотите удалить заказ {{(page - 1) * 10 + loop.index}}?')">
+                onclick="return confirm('Вы действительно хотите удалить запись №{{(page - 1) * 10 + loop.index}}?')">
                 &#128465;
             </a></td>
         </tr>
@@ -176,7 +176,7 @@
                 </td>
                 <td>
                     <a href="/api/admin/analysis/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
-                    onclick="return confirm('Вы действительно хотите удалить исследование №{{(page - 1) * 10 + loop.index}}?')">
+                    onclick="return confirm('Вы действительно хотите удалить запись №{{(page - 1) * 10 + loop.index}}?')">
                     &#128465;
                     </a>
                 </td>
