@@ -113,7 +113,7 @@ def get_orders(page=1):
         if orders.count() > 0:
             total = orders.count()
             for order in orders[offset: offset + PERPAGE]:
-                result[order.id] = [order.num_order, order.user_id, order.name,
+                result[order.id] = [order.num_order, order.user.email, order.name,
                                     order.price, order.created_date.strftime('%d.%m.%Y')]
             a_json = jsonify({'status': 'orders', 'result': result})
             pagination = Pagination(page=page, per_page=PERPAGE, total=total,
@@ -126,8 +126,7 @@ def get_orders(page=1):
         return render_template('/admin/index.html', crumb=['orders', 'Заказы'],
                                title='Админ панель', data='Поиск заказа по номеру', a_json=a_json.json)
     db_sess = db_session.create_session()
-    orders = db_sess.query(Order.id, Order.num_order, Order.user_id,
-                           Order.name, Order.price, Order.created_date).order_by(Order.id).all()
+    orders = db_sess.query(Order).order_by(Order.id).all()
     if not orders:
         total = 0
         a_json = jsonify({'status': 'error', 'errormsg': 'Заказов ещё нет.'})
@@ -135,7 +134,7 @@ def get_orders(page=1):
         result = {}
         total = len(orders)
         for order in orders[offset: offset + PERPAGE]:
-            result[order.id] = [order.num_order, order.user_id,
+            result[order.id] = [order.num_order, order.user.email,
                                 order.name, order.price, order.created_date.strftime('%d.%m.%Y')]
         a_json = jsonify({'status': 'orders', 'result': result})
     pagination = Pagination(page=page, per_page=PERPAGE, total=total,
