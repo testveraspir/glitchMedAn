@@ -78,8 +78,8 @@ def delete_user(user_id):
         if role.level == 2:
             a_json = jsonify({'status': 'error', 'errormsg': 'Удаление администратора невозможно!'})
         else:
+            orders = db_sess.query(Order).filter(Order.user_id == user_id).all()
             db_sess.delete(role)
-            orders = db_sess.query(Order).filter(Order.user == user_id).all()
             if orders:
                 for order in orders:
                     db_sess.delete(order)
