@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% if current_user.is_authenticated %}
+    <h1>Содержимое корзины:</h1>
+    {% if total == 0 %}
+        <div class="bg-body-tertiary p-5 rounded">
+            <div class="col-sm-8 py-5 mx-auto">
+                <h2 class="display-5 fw-normal" style="color: red;">Корзина пуста!!!</h2>
+                <p class="fs-5">Вы можете выбрать необходимое вам исследования.</p>
+                <p>
+                    <a class="btn btn-primary" href="/analyzes" role="button">Выбрать исследования</a>
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="d-grid gap-2 col-10 mx-auto">
+            <table class="table table-info table-striped table-hover">
+                <tr>
+                    <th>№</th>
+                    <th>Наименование услуги</th>
+                    <th>Стоимость</th>
+                    <th></th>
+                </tr>
+                <tbody class="table-group-divider">
+                {% for name, lst in cart.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ name }}</td>
+                        <td>{{ lst[1] }}</td>
+                        <td class="align-middle text-center">
+                            <a href="/del/{{ lst[0] }}" title="Удалить из корзины {{ name }}">&#128465;</a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/analyzes" class="btn btn-primary me-md-2">Добавить исследование</a>
+                <a href="/delete" class="btn btn-secondary">Очистить корзину</a>
+            </div>
+            <h3>Всего: {{ (total*0.9) | int }} &#8381;</h3>
+            <p>(со скидкой 10% для авторизованного пользователя)</p>
+            <a href="/order" class="btn btn-primary  col-3 mx-auto">Оформить заказ</a>
+        </div>
+    {% endif %}
+{% else %}
+    <h1>Содержимое корзины:</h1>
+    {% if total == 0 %}
+        <div class="bg-body-tertiary p-5 rounded">
+             <div class="col-sm-8 py-5 mx-auto">
+                <h2 class="display-5 fw-normal" style="color: red;">Корзина пуста!!!</h2>
+                <p class="fs-5">Вы можете выбрать необходимое вам исследования.</p>
+                <p>
+                    <a class="btn btn-primary" href="/analyzes" role="button">Выбрать исследования</a>
+                </p>
+            </div>
+        </div>
+    {% else %}
+        <div class="d-grid gap-2 col-10 mx-auto">
+            <table class="table table-info table-striped table-hover">
+                <tr>
+                    <th>№</th>
+                    <th>Наименование услуги</th>
+                    <th>Цена</th>
+                    <th></th>
+                </tr>
+                <tbody class="table-group-divider">
+                {% for name, lst in cart.items() %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ name }}</td>
+                        <td>{{ lst[1] }}</td>
+                        <td class="align-middle text-center">
+                            <a href="/del/{{ lst[0] }}" title="Удалить из корзины {{ name }}">&#128465;</a>
+                        </td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="/analyzes" class="btn btn-primary me-md-2">Добавить исследование</a>
+                <a href="/delete" class="btn btn-secondary">Очистить корзину</a>
+            </div>
+            <h3>Всего: {{ total }} &#8381;</h3>
+            <br>
+            <br>
+            <h4>Если Вы <a href="/login">авторизируетесь,</a> то получите 10% скидку.</h4>
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

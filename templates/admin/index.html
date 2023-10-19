@@ -1,0 +1,239 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}{{data}}{% endblock %}
+
+{% block body_content %}
+
+<br>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/api/admin" title="Назад в корень панели...">Главная</a></li>
+        {% if crumb %}
+        <li class="breadcrumb-item"><a href="/api/admin/{{crumb[0]}}"
+                                       title="Назад к {{crumb[1]}}...">{{crumb[1]}}</a></li>
+        {% endif %}
+        <li class="breadcrumb-item active" aria-current="page">{{data}}</li>
+    </ol>
+</nav>
+
+{% if a_json['status'] == 'error' %}
+    <h3 align="center" class="text-danger">{{a_json['errormsg']}}</h3>
+{% endif %}
+{% if a_json['status'] == 'index' %}
+    <!-- выбор действия для администратора -->
+<h2>Панель администратора</h2><br>
+    <table align="center" cellspacing="0" cellpadding="20">
+        <tr align="center" class="h3">
+            <td><a href="/api/admin/{{a_json['action'][0]}}">Исследования</a></td>
+            <td><a href="/api/admin/{{a_json['action'][1]}}">Заказы</a></td>
+            <td><a href="/api/admin/{{a_json['action'][2]}}">Пользователи</a></td>
+        </tr>
+    </table><br>
+{% endif %}
+
+
+{% if a_json['status'] == 'users' %}
+<!-- pagination on top -->
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+
+    <div class="d-flex justify-content-center text-center h3 p-2">
+        {{data}}
+    </div>
+    <!-- генерация перечня пользователей-->
+    <table align="center" class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">№</th>
+        <th scope="col">e-mail</th>
+        <th scope="col">Имя</th>
+        <th scope="col">Фамилия</th>
+        <th scope="col">Дата рождения</th>
+        <th scope="col">Пол</th>
+        <th scope="col">Когда зарегистрирован</th>
+        <th scope="col">Примечание</th>
+        <th scope="col">&nbsp</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for key, value in a_json['result'].items() %}
+    <tr>
+        <th scope="row">{{(page - 1) * 10 + loop.index}}</th>
+        <td>{{value[0]}}</td>
+        <td>{{value[1]}}</td>
+        <td>{{value[2]}}</td>
+        <td>{{value[3]}}</td>
+        <td>{{value[4]}}</td>
+        <td>
+            {% if value[5] != 2 %}
+            {{value[6]}}
+            {% else %}
+            <b>Он назначен &#128521;</b>
+            {% endif %}
+        </td>
+        <td>
+            {% if value[5] == 2 %}
+            <b>АДМИН</b>
+            {% endif %}
+        </td>
+        <td>
+            {% if value[5] == 1 %}
+                <a href="/api/admin/users/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
+                onclick="return confirm('Вы действительно хотите удалить пользователя {{(page - 1) * 10 + loop.index}}?')">
+                &#128465;
+                </a>
+            {% else %}
+                <span style="color: red;" title="Удалять админа нельзя!"><b>&cross;</b></span>
+            {% endif %}
+        </td>
+    </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+{% endif %}
+
+{% if a_json['status'] == 'orders' %}
+    <!-- pagination on top -->
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+    <!-- генерация перечня заказов-->
+    <div class="d-flex justify-content-center text-center h3 p-2">
+        {{data}}
+    </div>
+    <table align="center" class="table">
+    <thead class="thead-light">
+    <tr>
+        <th scope="col">№</th>
+        <th scope="col">Номер заказа</th>
+        <th scope="col">ID пользователя</th>
+        <th scope="col">Наименование услуги</th>
+        <th scope="col">Цена, руб.</th>
+        <th scope="col">Когда создан заказ</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for key, value in a_json['result'].items() %}
+        <tr>
+            <th scope="row">{{(page - 1) * 10 + loop.index}}</th>
+            <td>{{value[0]}}</td>
+            <td>{{value[1]}}</td>
+            <td>{{value[2]}}</td>
+            <td>{{value[3]}}</td>
+            <td>{{value[4]}}</td>
+            <td><a href="/api/admin/orders/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
+                onclick="return confirm('Вы действительно хотите удалить заказ {{(page - 1) * 10 + loop.index}}?')">
+                &#128465;
+            </a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+    <!-- pagination at bottom -->
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+{% endif %}
+
+
+{% if a_json['status'] == 'analysis' %}
+    <!-- pagination on top -->
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+    <!-- генерация перечня исследований-->
+    <div class="d-flex justify-content-center text-center h3 p-2">
+        {{data}}
+    </div>
+    <table align="center" class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название услуги</th>
+            <th scope="col">Цена, руб.</th>
+            <th scope="col">Дата создания/редактирования</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in a_json['result'].items() %}
+            <tr>
+                <th scope="row">{{(page - 1) * 10 + loop.index}}</th>
+                <td>{{value[0]}}</td>
+                <td>{{value[1]}}</td>
+                <td>{{value[2]}}</td>
+                <td>
+                    <a href="/api/admin/analysis/edit/{{key}}" title="Редактировать запись №{{(page - 1) * 10 + loop.index}}">
+                    &#9998;
+                    </a>
+                </td>
+                <td>
+                    <a href="/api/admin/analysis/del/{{key}}" title="Удалить запись №{{(page - 1) * 10 + loop.index}}"
+                    onclick="return confirm('Вы действительно хотите удалить исследование №{{(page - 1) * 10 + loop.index}}?')">
+                    &#128465;
+                    </a>
+                </td>
+                </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center text-center p-3 px-md-4 mb-3">
+        <a class="btn btn-primary" href="/api/admin/analysis/create">Добавить</a>
+    </div>
+    <!-- pagination at bottom -->
+    <div class="container d-flex justify-content-center text-center">
+        {{ pagination.links }}
+    </div>
+{% endif %}
+
+{% if a_json['status'] == 'create' %}
+    <!-- форма добавления нового исследования-->
+    <form method="post">
+        <table align="center" cellspacing="0" cellpadding="5">
+            <tr align="right">
+                <td>&nbsp;</td>
+                <td><input type="hidden" class="form-control" name="id" id="id" value="{{a_json['test']}}"></td>
+            </tr>
+            <tr align="right">
+                <td>Название нового исследования:</td>
+                <td><input type="text" class="form-control" name="name" id="name"></td>
+            </tr>
+            <tr align="right">
+                <td>Цена нового исследования:</td>
+                <td><input type="text" class="form-control" name="price" id="price"></td>
+            </tr>
+        </table>
+        <div class="d-flex justify-content-center text-center p-3 px-md-4 mb-3">
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+    </form>
+{% endif %}
+
+{% if a_json['status'] == 'edit' %}
+    <!-- форма редактирования исследования-->
+    <form method="post">
+        <table align="center" cellspacing="0" cellpadding="5">
+        {% for key, val in a_json['test'].items() %}
+        <tr align="right">
+            {% if key == 'name' %}
+                <td>Название исследования:</td>
+            {% elif key == 'price' %}
+                 <td>Цена:</td>
+            {% endif %}
+                <td><input type="{{val[1]}}" class="form-control" name="{{key}}" id="{{key}}" value="{{val[0]}}"></td>
+        </tr>
+        {% endfor %}
+        </table>
+        <div class="d-flex justify-content-center text-center p-3 px-md-4 mb-3">
+            <button type="submit" class="btn btn-primary">Изменить</button>
+        </div>
+    </form>
+{% endif %}
+{% endblock %}

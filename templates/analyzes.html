@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<div class="text-center h1">Лабораторные исследования</div><br>
+    {% if found %}
+        <div class="text-center h3">{{ found }}</div><br>
+    {% endif %}
+    <div class="d-grid gap-2 col-10 mx-auto">
+        <table class="table table-info table-striped table-hover">
+            <thead>
+                <tr class="h6">
+                    <th scope="col">№</th>
+                    <th scope="col">Наименование услуги</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            {% for item in tests %}
+                <tr>
+                    <th scope="row">
+                        {{ loop.index }}
+                    </th>
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.price }} &#8381;
+                    </td>
+                    <td class="align-middle text-center">
+                        <a href="/add_to_cart/{{ item['id'] }}" title="Добавить в корзину">&#128722; В корзину</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+{% if current_user.is_authenticated %}
+    <h1>Личный кабинет</h1>
+    {% if orders == 0 %}
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+            <h2 class="text-body-emphasis">У Вас пока нет заказов!!!</h2><br>
+            <div class="d-inline-flex gap-2 mb-5">
+                <a href="/analyzes" class="d-inline-flex align-items-center btn btn-primary btn-lg px-4 rounded-pill">Выбрать
+                    исследования</a>
+                <a href="/logout" class="btn btn-outline-secondary btn-lg px-4 rounded-pill">Выйти</a>
+            </div>
+        </div>
+    {% else %}
+    <div class="d-grid gap-2 col-10 mx-auto">
+        <table class="table table-info table-striped table-hover">
+            <tr>
+                <th>№</th>
+                <th>Номер заказа</th>
+                <th>Наименование услуги</th>
+                <th>Цена</th>
+                <th>Дата создания</th>
+            </tr>
+            <tbody class="table-group-divider">
+            {% for item in orders %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.num_order }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.created_date.strftime('%d.%m.%Y') }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        <div class="d-md-flex justify-content-md-end">
+            <a href="/logout" class="btn btn-outline-secondary px-4 rounded-pill col-2 ">Выйти</a>
+        </div>
+    </div>
+    {% endif %}
+{% endif %}
+{% endblock %}
