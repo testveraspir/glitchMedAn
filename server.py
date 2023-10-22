@@ -197,8 +197,7 @@ def order():
         count += 1
         order_lst = Order()
         order_lst.user_id = current_user.id
-        order_lst.name = name
-        order_lst.price = lst[1]
+        order_lst.analiz_id = lst[0]
         order_lst.num_order = num_order
         current_user.order.append(order_lst)
     db_sess.merge(current_user)

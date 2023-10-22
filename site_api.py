@@ -113,8 +113,8 @@ def get_orders(page=1):
         if orders.count() > 0:
             total = orders.count()
             for order in orders[offset: offset + PERPAGE]:
-                result[order.id] = [order.num_order, order.user.email, order.name,
-                                    order.price, order.created_date.strftime('%d.%m.%Y')]
+                result[order.id] = [order.num_order, order.user.email, order.analiz.name,
+                                    order.analiz.price, order.created_date.strftime('%d.%m.%Y')]
             a_json = jsonify({'status': 'orders', 'result': result})
             pagination = Pagination(page=page, per_page=PERPAGE, total=total,
                                     items=orders[offset: offset + PERPAGE],
@@ -135,7 +135,7 @@ def get_orders(page=1):
         total = len(orders)
         for order in orders[offset: offset + PERPAGE]:
             result[order.id] = [order.num_order, order.user.email,
-                                order.name, order.price, order.created_date.strftime('%d.%m.%Y')]
+                                order.analiz.name, order.analiz.price, order.created_date.strftime('%d.%m.%Y')]
         a_json = jsonify({'status': 'orders', 'result': result})
     pagination = Pagination(page=page, per_page=PERPAGE, total=total,
                             items=orders[offset: offset + PERPAGE],
