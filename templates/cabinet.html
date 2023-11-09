@@ -28,8 +28,8 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ item.num_order }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.price }}</td>
+                    <td>{{ item.analiz.name }}</td>
+                    <td>{{ item.analiz.price }}</td>
                     <td>{{ item.created_date.strftime('%d.%m.%Y') }}</td>
                 </tr>
             </tbody>
